@@ -50,14 +50,19 @@ func (entry *Entry) SetQualifier(id int) error {
 	return nil
 }
 
+// // GetQualifier returns the Uid or Gid the entry applies to.
+// func (entry *Entry) GetQualifier() (int, error) {
+// 	var id int
+// 	rv, _ := C.acl_set_qualifier(entry.e, unsafe.Pointer(&id))
+// 	if rv < 0 {
+// 		return -1, fmt.Errorf("unable to get qualifier")
+// 	}
+// 	return id, nil
+// }
+
 // GetQualifier returns the Uid or Gid the entry applies to.
-func (entry *Entry) GetQualifier() (int, error) {
-	var id int
-	rv, _ := C.acl_set_qualifier(entry.e, unsafe.Pointer(&id))
-	if rv < 0 {
-		return -1, fmt.Errorf("unable to get qualifier")
-	}
-	return id, nil
+func (entry *Entry) GetQualifier() int {
+	return *(*int)(C.acl_get_qualifier(entry.e))
 }
 
 // GetPermset returns the permission for an Entry.
